@@ -150,9 +150,9 @@
         }
         //关闭监听共享照片流产生的频繁通知信息
         [ALAssetsLibrary disableSharedPhotoStreamsSupport];
-       WS(wSelf);
+       
         [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-           SS(sSelf);
+            
             NSLog(@"group name:%@",[group valueForProperty:ALAssetsGroupPropertyName]);
            
            if ([group numberOfAssets]>0) {

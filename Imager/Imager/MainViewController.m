@@ -8,7 +8,7 @@
 
 #import "MainViewController.h"
 
-#import "AlbumListViewController.h"
+#import "AlbumViewController.h"
 
 #import "PhotoEditViewController.h"
 
@@ -22,15 +22,17 @@
     
     
     
-    AlbumListViewController * controller = [[AlbumListViewController alloc] init];
+    AlbumViewController * controller = [[AlbumViewController alloc] init];
     
     controller.maxNum = 9;
     
+    /*
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
     [self presentViewController:navigationController animated:YES completion:NULL];
+    */
     
-    //[self.navigationController pushViewController:controller animated:NO];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)viewDidLoad {
