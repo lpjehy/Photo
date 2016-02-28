@@ -8,10 +8,9 @@
 
 
 
-@interface AlbumListViewController : UITableView <UITableViewDataSource, UITableViewDelegate> {
-    UITableView *dataTableView;
+@interface AlbumTableView : UITableView <UITableViewDataSource, UITableViewDelegate> {
+    
 }
 
-@property (weak, nonatomic) id <MCTalkPhotoPicViewDelegate> delegate;
 @property (assign ,nonatomic) long maxNum;
 @end

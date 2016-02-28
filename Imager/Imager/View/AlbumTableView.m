@@ -6,7 +6,7 @@
 //
 //
 
-#import "AlbumListViewController.h"
+#import "AlbumTableView.h"
 #import <Photos/Photos.h>
 #import "AlbumCell.h"
 #import "PhotoManager.h"
@@ -19,7 +19,7 @@
 
 #import <AssetsLibrary/ALAssetRepresentation.h>
 
-@interface AlbumListViewController (){
+@interface AlbumTableView (){
    ///所有相册智能相册
    NSMutableArray * dataArray;
    NSMutableArray * albumsArray;
@@ -27,29 +27,20 @@
 }
 
 @end
-@implementation AlbumListViewController
+@implementation AlbumTableView
 #pragma mark   - lifeCycle
-- (void)viewDidLoad {
-   [super viewDidLoad];
+- (id)init {
+   self = [super init];
    
-    [self showCancel];
+    if (self) {
+        [[PhotoManager sharedInstance] clearCache];
+        dataArray = [[NSMutableArray alloc]init];
+        albumsArray = [[NSMutableArray alloc]init];
+        [self beginAlbums];
+    }
     
-   self.navigationItem.title = @"Local Albums";
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    
-    dataTableView = [[UITableView alloc] init];
-    dataTableView.delegate = self;
-    dataTableView.dataSource = self;
-    dataTableView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64);
-    
-    [self.view addSubview:dataTableView];
-    
-   [[PhotoManager sharedInstance] clearCache];
-   dataArray = [[NSMutableArray alloc]init];
-   albumsArray = [[NSMutableArray alloc]init];
-    [self beginAlbums];
+    return self;
     
 }
 #pragma mark - UITableViewDelegate
@@ -78,6 +69,7 @@
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    /*
    AlbumViewController * talkPhotoPicViewController =[[AlbumViewController alloc] init];
    talkPhotoPicViewController.assetsFetchResults = dataArray[indexPath.row];
    talkPhotoPicViewController.delegate = self.delegate;
@@ -85,6 +77,7 @@
    PHCollection *collection = albumsArray[indexPath.row];
    talkPhotoPicViewController.navigationItem.title = collection.localizedTitle;
    [self.navigationController pushViewController:talkPhotoPicViewController animated:YES];
+     */
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
    return 60;
@@ -128,6 +121,7 @@
             }
         }
        if ([dataArray count]>0) {
+           /*
           AlbumViewController * talkPhotoPicViewController =[[AlbumViewController alloc] init];
           talkPhotoPicViewController.maxNum = self.maxNum;
           talkPhotoPicViewController.assetsFetchResults = maxNumPHAsset;
@@ -135,6 +129,7 @@
           PHCollection *collection = maxNumPHAssetCollection;
           talkPhotoPicViewController.navigationItem.title = collection.localizedTitle;
           [self.navigationController pushViewController:talkPhotoPicViewController animated:NO];
+            */
        }
 
     }
@@ -165,9 +160,10 @@
            }
            if (![group valueForProperty:ALAssetsGroupPropertyName]) {
               dispatch_async(dispatch_get_main_queue(), ^{
-                 [dataTableView reloadData];
+                 [self reloadData];
                  
                  if ([dataArray count]>0) {
+                     /*
                     AlbumViewController * talkPhotoPicViewController =[sSelf.storyboard instantiateViewControllerWithIdentifier:@"MCTalkPhotoPicViewController"];
                     talkPhotoPicViewController.maxNum = sSelf.maxNum;
                     talkPhotoPicViewController.alAssetGroup = dataArray[0];
@@ -175,6 +171,7 @@
                    
                     talkPhotoPicViewController.navigationItem.title =[dataArray[0] valueForProperty:ALAssetsGroupPropertyName] ;
                     [sSelf.navigationController pushViewController:talkPhotoPicViewController animated:NO];
+                      */
                  }
               });
             }
