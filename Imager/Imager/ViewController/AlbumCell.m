@@ -7,9 +7,13 @@
 //
 
 #import "AlbumCell.h"
-#import "PhotoManager.h"
+
+#import "Album.h"
+
+#import "AlbumManager.h"
+
 @interface AlbumCell(){
-    PhotoManager * manager ;
+    
 }
 @end
 @implementation AlbumCell
@@ -17,7 +21,8 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        manager = [[PhotoManager alloc]init];
+        
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         albumImageView = [[UIImageView alloc] init];
         
@@ -38,50 +43,35 @@
         [self.contentView addSubview:subTitleLabel];
     }
     
-    
     return self;
 }
 
-- (void)setInfo:(id)info andIndexPath:(NSIndexPath *)indexPath{
-    //photoTalk
-    if (IOS_8_OR_LATER) {
-        PHFetchResult *fetchResult = info;
+
+- (void)setAlbumIndex:(NSInteger)index {
+    Album *album = [[AlbumManager getInstance] albumForIndex:index completion:^(UIImage *result, NSDictionary *dic) {
         
-        manager.phAsset = fetchResult[fetchResult.count -1];
-        [manager requestThumbnailImageWithSize:CGSizeMake(120, 120) imageNum:((int)indexPath.row)*-1 completion:^(UIImage *result, NSDictionary *dic) {
-            albumImageView.image = result;
-        }];
+        albumImageView.image = result;
         
-    }
-    else {
-        ALAssetsGroup * group =info;
-        
-        [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:[group numberOfAssets]-1] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-            manager.alAsset = result;
-            [manager requestThumbnailImageWithSize:CGSizeMake(120, 120) imageNum:((int)indexPath.row)*-1 completion:^(UIImage *result, NSDictionary *dic) {
-                albumImageView.image = result;
-            }];
-            
-        }];
-    }
+    }];
+    
+    
+    titleLabel.text = album.title;
+    subTitleLabel.text = album.subTitle;
 }
 
-- (void)setTitle:(NSString *)title subTitle:(NSString *)subTitle {
-    titleLabel.text = title;
-    subTitleLabel.text = subTitle;
-}
 
 @end
-@implementation  UITableView(MCTalkAlbumCell)
 
-- (AlbumCell *)MCTalkAlbumCell {
-    static NSString *CellIdentifier = @"MCTalkAlbumCell";
-    AlbumCell *Cell=(AlbumCell *)[self dequeueReusableCellWithIdentifier:CellIdentifier];
-    if(nil == Cell) {
-        
-        Cell = [[AlbumCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+
+@implementation  UITableView(AlbumCell)
+
+- (AlbumCell *)AlbumCell {
+    static NSString *CellIdentifier = @"AlbumCell";
+    AlbumCell *cell = (AlbumCell *)[self dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(nil == cell) {
+        cell = [[AlbumCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    Cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    return Cell;
+    
+    return cell;
 }
 @end

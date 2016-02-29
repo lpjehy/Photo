@@ -11,8 +11,10 @@
     int cacheNum;
 }
 @end
+
 @implementation PhotoManager
-+ (instancetype)sharedInstance{
+
++ (instancetype)sharedInstance {
     
     static PhotoManager *manager;
     static dispatch_once_t onceToken;
@@ -23,25 +25,8 @@
     });
     return manager;
 }
-- (NSArray *)getPhotoArray{
-    NSMutableArray * photosArray = [[NSMutableArray alloc]init];
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    PHFetchResult *assetsFetchResults = [PHAsset fetchAssetsWithOptions:options];
-    // 在资源的集合中获取第一个集合，并获取其中的图片
-    
-    PHCachingImageManager *imageManager = [[PhotoManager sharedInstance]phCachingImageManager];
-    for (int i = 0; i < assetsFetchResults.count; i++) {
-        [imageManager requestImageForAsset:assetsFetchResults[i]
-                                targetSize:CGSizeMake(240*2, 128*2)
-                               contentMode:PHImageContentModeAspectFill
-                                   options:nil
-                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                 [photosArray addObject:result];
-                             }];
-    }
-    return photosArray;
-}
+
+
 - (PHCachingImageManager *)phCachingImageManager{
     static PHCachingImageManager *phCachingImageManager;
     static dispatch_once_t onceToken;
@@ -50,15 +35,12 @@
     });
     return phCachingImageManager;
 }
-- (long)getPhotoCount{
-    
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    PHFetchResult *assetsFetchResults = [PHAsset fetchAssetsWithOptions:options];
-    // 在资源的集合中获取第一个集合，并获取其中的图片
-    return assetsFetchResults.count;
-    
+
+- (void)clearCache {
+    [self.imageCache removeAllObjects];
 }
+
+
 - (UIImage *)originImage {
    
     __block UIImage *resultImage;
@@ -171,7 +153,11 @@
             PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
             imageRequestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
             // 在 PHImageManager 中，targetSize 等 size 都是使用 px 作为单位，因此需要对targetSize 中对传入的 Size 进行处理，宽高各自乘以 ScreenScale，从而得到正确的图片
-            return [[[PhotoManager sharedInstance] phCachingImageManager] requestImageForAsset:_phAsset targetSize:size contentMode:PHImageContentModeAspectFill options:imageRequestOptions resultHandler:^(UIImage *result, NSDictionary *info) {
+            return [[[PhotoManager sharedInstance] phCachingImageManager] requestImageForAsset:_phAsset
+                                                                                    targetSize:size
+                                                                                   contentMode:PHImageContentModeAspectFill
+                                                                                       options:imageRequestOptions
+                                                                                 resultHandler:^(UIImage *result, NSDictionary *info) {
                 // 排除取消，错误，低清图三种情况，即已经获取到了高清图时，把这张高清图缓存到 _thumbnailImage 中
                 BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
                 if (downloadFinined) {
@@ -246,9 +232,7 @@
 - (UIImage *)getImageWithNum:(int)num{
    return  [self.imageCache objectForKey:[NSString stringWithFormat:@"photo:%d",num]];
 }
-- (void)clearCache{
-    [self.imageCache removeAllObjects];
-}
+
 #pragma mark - get and set
 - (BOOL)usePhotoKit{
     if (IOS_8_OR_LATER) {

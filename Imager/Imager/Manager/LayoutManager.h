@@ -10,4 +10,14 @@
 
 @interface LayoutManager : NSObject
 
++ (LayoutManager *)getInstance;
+
+- (NSArray *)currentLayouts;
+
+- (CGRect)layoutForPhoto:(NSInteger)index  baseWidth:(CGFloat)baseWidth;
+
+@property (assign , nonatomic) NSInteger photoNum;
+
+@property (assign , nonatomic) NSInteger currentLayoutIndex;
+
 @end

@@ -38,15 +38,15 @@
 }
 
 - (void)showBack {
-    UIButton *rightButton = [[UIButton alloc] init];
-    rightButton.frame = CGRectMake(0, 0, 44, 44);
-    [rightButton setTitle:@"Back" forState:UIControlStateNormal];
-    rightButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [rightButton setTitleColor:ColorTextDark forState:UIControlStateNormal];
-    [rightButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
-    self.navigationItem.rightBarButtonItem = rightItem;
+    UIButton *leftButton = [[UIButton alloc] init];
+    leftButton.frame = CGRectMake(0, 0, 44, 44);
+    [leftButton setTitle:@"Back" forState:UIControlStateNormal];
+    leftButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [leftButton setTitleColor:ColorTextDark forState:UIControlStateNormal];
+    [leftButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    self.navigationItem.leftBarButtonItem = leftItem;
     
 }
 
@@ -56,6 +56,9 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = ColorBaseBackground;
+    
+    self.extendedLayoutIncludesOpaqueBars = NO;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
 }
 

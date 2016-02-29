@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *ImageGetedNotification = @"ImageGetedNotification";
-static NSString *ImageKey = @"ImageKey";
+@protocol ImagePickerDelegate <NSObject>
+@optional
+
+- (void)imageDidPicked:(UIImage *)image;
+@end
 
 @interface ImagePicker : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     
@@ -17,8 +20,10 @@ static NSString *ImageKey = @"ImageKey";
 
 + (ImagePicker *)getInstance;
 
-- (void)openCamera:(UIViewController *)viewController;
+- (void)openCamera:(UIViewController *)viewController allowsEditing:(BOOL)allowsEditing delegate:(id)delegate;
+- (void)openCamera:(UIViewController *)viewController delegate:(id)delegate;
 
-- (void)openAlbum:(UIViewController *)viewController;
+- (void)openAlbum:(UIViewController *)viewController allowsEditing:(BOOL)allowsEditing delegate:(id)delegate;
+- (void)openAlbum:(UIViewController *)viewController delegate:(id)delegate;
 
 @end

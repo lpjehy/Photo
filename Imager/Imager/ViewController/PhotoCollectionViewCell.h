@@ -7,24 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PhotoManager.h"
+
 
 
 static NSString * PhotoCollectionViewCellIdentifier = @"PhotoCollectionViewCellIdentifier";
 
 @interface PhotoCollectionViewCell : UICollectionViewCell {
-    UIImageView *mainImageView;
-    UIImageView *selectedImageView;
     
-    float ImageViewSize;
 }
 
-- (void)setInfo:(id)phAsset andNum:(int)num;
-
+- (void)setPhoto:(NSInteger)index;
 
 @property (assign, nonatomic) BOOL photoSelected;
 
-@end
-@interface UICollectionView(UITalkPhotoCollectionViewCell)
-- (PhotoCollectionViewCell *)UITalkPhotoCollectionViewCellAndIndexPath:(NSIndexPath *)indexpath;
+- (void)reset;
+
 @end

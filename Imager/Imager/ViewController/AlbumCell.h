@@ -7,18 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "MCCommonTableViewCell.h"
+
 @interface AlbumCell : UITableViewCell {
     UIImageView *albumImageView;
     UILabel *titleLabel;
     UILabel *subTitleLabel;
 }
 
-- (void)setInfo:(id)info andIndexPath:(NSIndexPath *)indexPath;
-- (void)setTitle:(NSString *)title subTitle:(NSString *)subTitle;
+- (void)setAlbumIndex:(NSInteger)index;
 
 
 @end
-@interface UITableView(MCTalkAlbumCell)
-- (AlbumCell*)MCTalkAlbumCell;
+@interface UITableView(AlbumCell)
+- (AlbumCell *)AlbumCell;
 @end

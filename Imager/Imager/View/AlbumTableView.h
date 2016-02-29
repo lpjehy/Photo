@@ -8,9 +8,11 @@
 
 
 
-@interface AlbumTableView : UITableView <UITableViewDataSource, UITableViewDelegate> {
+@interface AlbumTableView : UITableView <UITableViewDataSource> {
     
 }
 
-@property (assign ,nonatomic) long maxNum;
+
+@property(nonatomic, assign) BOOL show;
+
 @end

@@ -22,9 +22,10 @@
 @property (strong,nonatomic) UIImage * previewImage;
 + (instancetype)sharedInstance;
 - (PHCachingImageManager *)phCachingImageManager;
-- (NSArray *)getPhotoArray;
-- (long)getPhotoCount;
+
 - (void)clearCache;
+
+
 //图片缓存内容
 - (UIImage *)getImageWithNum:(int)num;
 /// Asset 的原图（包含系统相册“编辑”功能处理后的效果）

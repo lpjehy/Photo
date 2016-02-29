@@ -24,8 +24,6 @@
     
     AlbumViewController * controller = [[AlbumViewController alloc] init];
     
-    controller.maxNum = 9;
-    
     /*
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     

@@ -8,8 +8,15 @@
 
 #import "PhotoCollectionViewCell.h"
 
+#import "AlbumManager.h"
+
 @interface PhotoCollectionViewCell(){
-    PhotoManager *manager;
+    AlbumManager *manager;
+    
+    UIImageView *mainImageView;
+    UIImageView *selectedImageView;
+    
+    float ImageViewSize;
 }
 @end
 @implementation PhotoCollectionViewCell
@@ -19,7 +26,7 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        manager = [[PhotoManager alloc]init];
+        manager = [AlbumManager getInstance];
         
         
         
@@ -39,9 +46,7 @@
     return self;
 }
 
-- (void)awakeFromNib {
-    
-}
+
 
 - (void)setPhotoSelected:(BOOL)selected {
     photoSelected = selected;
@@ -56,58 +61,25 @@
     return photoSelected;
 }
 
-- (void)setInfo:(id)phAsset andNum:(int)num{
-     //photoTalk
-    if (manager == nil) {
-        manager = [[PhotoManager alloc]init];
-    }
+- (void)setPhoto:(NSInteger)index {
     
-    if (IOS_8_OR_LATER) {
-        manager.phAsset = phAsset;
-        
-        [manager requestThumbnailImageWithSize:CGSizeMake(ImageViewSize, ImageViewSize)
-                                      imageNum:(int)num
-                                    completion:^(UIImage *result, NSDictionary *dic) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                mainImageView.image = result;
-            });
-            
-        }];
-    }
-    else {
-        ALAssetsGroup * group = phAsset;
-        [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:num] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result1, NSUInteger index, BOOL *stop) {
-            manager.alAsset = result1;
-            
-            [manager requestThumbnailImageWithSize:CGSizeMake(ImageViewSize, ImageViewSize)
-                                          imageNum:num
-                                        completion:^(UIImage *result2, NSDictionary *dic) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    mainImageView.image = result2;
-                });
-
-            }];
-            
-        }];
-
-    }
+    NSLog(@"%zi", index);
+    [manager thumbnailImageForIndex:index completion:^(UIImage *result, NSDictionary *dic) {
+                                    
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        NSLog(@"get %zi", index);
+                                        mainImageView.image = result;
+                                    });
+                                    
+                                }];
+    
+    
     
     
 }
-@end
-@implementation UICollectionView(UITalkPhotoCollectionViewCell)
-- (PhotoCollectionViewCell *)UITalkPhotoCollectionViewCellAndIndexPath:(NSIndexPath *)indexpath{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-         UINib *nib = [UINib nibWithNibName:PhotoCollectionViewCellIdentifier bundle:nil];
-        [self registerNib:nib forCellWithReuseIdentifier:PhotoCollectionViewCellIdentifier];
-    });
-    PhotoCollectionViewCell * cell = [self dequeueReusableCellWithReuseIdentifier:PhotoCollectionViewCellIdentifier forIndexPath:indexpath];
-    cell.backgroundColor = ColorBackground;
-    
-    return cell;
+
+- (void)reset {
+    self.photoSelected = NO;
+    mainImageView.image = nil;
 }
 @end
